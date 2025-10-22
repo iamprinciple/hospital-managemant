@@ -75,10 +75,12 @@ const updateDoctor = async (req, res) => {
             { specialization, experience, availableTime },
             { new: true }
         )
+        console.log(updated);
+        
         if (!updated) {
             return res.status(401).send({ message: "Error updating", status: false });
         } else {
-            res.status(200).send({ message: "update successful", status: true })
+            res.status(200).send({ message: "update successful", status: true, updated })
         }
         // }
     } catch (error) {
@@ -128,13 +130,13 @@ const updateAppointment = async (req, res) => {
         if (!updatedAppointment) {
             return res.status(404).json({ message: "Appointment not found", status: false });
         } else {
-            // for (const appointment of allAppointment) {
-            //     if (appointment?.patientEmail) {
-            //         console.log("Sending to:", appointment.patientEmail);
-            //         await approvedMail(appointment.patientfirstname, status, appointment.doctorEmail, appointment.patientEmail)
-            //     }
+            for (const appointment of allAppointment) {
+                if (appointment?.patientEmail) {
+                    console.log("Sending to:", appointment.patientEmail);
+                    await approvedMail(appointment.patientFirstname, status, appointment.doctorEmail, appointment.patientEmail)
+                }
 
-            // }
+            }
 
             res.status(200).json({ message: "Appointment status updated", status: true, data: updatedAppointment });
         }
